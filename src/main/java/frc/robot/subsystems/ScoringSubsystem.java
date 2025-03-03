@@ -37,7 +37,7 @@ public class ScoringSubsystem extends SubsystemBase {
 
     currentState = ScoringStates.NONE;
 
-    sensorThreshold = .12;
+    sensorThreshold = .10;
     debouncer = new Debouncer(.025);
   }
 

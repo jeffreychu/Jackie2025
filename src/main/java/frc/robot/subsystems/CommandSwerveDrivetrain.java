@@ -11,6 +11,7 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -30,8 +31,12 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
+import frc.robot.commands.IntakingCommand;
+import frc.robot.commands.SetElevatorStateCommand;
+import frc.robot.commands.SetScoringStateCommand;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
+import frc.robot.subsystems.ScoringSubsystem.ScoringStates;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -204,6 +209,16 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     //PathPlanner config
     private void configureAutoBuilder() {
+        NamedCommands.registerCommand("Set Elevator L3", new SetElevatorStateCommand(ElevatorStates.L3));
+        NamedCommands.registerCommand("Set Elevator L2", new SetElevatorStateCommand(ElevatorStates.L2));
+        NamedCommands.registerCommand("Set Elevator L1", new SetElevatorStateCommand(ElevatorStates.L1));
+        NamedCommands.registerCommand("Set Elevator HOME", new SetElevatorStateCommand(ElevatorStates.HOME));
+
+        NamedCommands.registerCommand("Intake", new IntakingCommand());
+        NamedCommands.registerCommand("Outake", new SetScoringStateCommand(ScoringStates.OUTAKE));
+        NamedCommands.registerCommand("Slow Outake", new SetScoringStateCommand(ScoringStates.OUTAKE2));
+        NamedCommands.registerCommand("No Scoring", new SetScoringStateCommand(ScoringStates.NONE));
+
         try {
             var config = RobotConfig.fromGUISettings();
             AutoBuilder.configure(

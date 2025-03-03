@@ -55,10 +55,10 @@ public class RobotContainer {
     private final CommandXboxController driverJoystick = new CommandXboxController(Constants.kDriverController);
     private final CommandXboxController operatorJoystick = new CommandXboxController(Constants.kOperatorController);
 
-    public final static CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final static ElevatorSubsystem elevator = new ElevatorSubsystem();
     public final static ScoringSubsystem coralShooter = new ScoringSubsystem();
     public final LEDController ledController = new LEDController();
+    public final static CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     //NAMED COMMANDS FOR AUTO
     
@@ -68,17 +68,6 @@ public class RobotContainer {
     public RobotContainer() {
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
-
-        NamedCommands.registerCommand("Set Elevator L3", new SetElevatorStateCommand(elevator , ElevatorStates.L3));
-        NamedCommands.registerCommand("Set Elevator L2", new SetElevatorStateCommand(elevator , ElevatorStates.L2));
-        NamedCommands.registerCommand("Set Elevator L1", new SetElevatorStateCommand(elevator , ElevatorStates.L1));
-        NamedCommands.registerCommand("Set Elevator HOME", new SetElevatorStateCommand(elevator , ElevatorStates.HOME));
-
-        NamedCommands.registerCommand("Intake", new IntakingCommand(coralShooter));
-        NamedCommands.registerCommand("Outake", new SetScoringStateCommand(coralShooter, ScoringStates.OUTAKE));
-        NamedCommands.registerCommand("Slow Outake", new SetScoringStateCommand(coralShooter, ScoringStates.OUTAKE2));
-        NamedCommands.registerCommand("No Scoring", new SetScoringStateCommand(coralShooter, ScoringStates.NONE));
-
 
         configureBindings();
     }

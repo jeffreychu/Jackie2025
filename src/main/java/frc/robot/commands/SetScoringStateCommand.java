@@ -4,7 +4,10 @@
 
 package frc.robot.commands;
 
+import com.pathplanner.lib.config.RobotConfig;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.ScoringSubsystem;
 import frc.robot.subsystems.ScoringSubsystem.ScoringStates;
 
@@ -14,9 +17,9 @@ public class SetScoringStateCommand extends Command {
   private ScoringSubsystem scoringSubsystem;
   private ScoringStates state;
 
-  public SetScoringStateCommand(ScoringSubsystem scoringSubsystem , ScoringStates state) {
+  public SetScoringStateCommand(ScoringStates state) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.scoringSubsystem = scoringSubsystem;
+    this.scoringSubsystem = RobotContainer.coralShooter;
     this.state = state;
     addRequirements(scoringSubsystem);
   }

@@ -7,7 +7,7 @@ package frc.robot;
 public final class Constants {
 
     public static final int kDriverController = 0;
-    public static final int kOperatorController = 0;
+    public static final int kOperatorController = 0; // TODO change
 
     public static class DriveMotors {
         // DRIVE MOTOR ID'S
@@ -24,7 +24,7 @@ public final class Constants {
     }
 
     public static class Elevator {
-        public static final double positionThreshold = 0.1;
+        public static final double positionThreshold = 0.01;
         public static class Motors {
             // ELEVATOR MOTOR ID'S
             public static final int elevatorLeftID = 13;
@@ -59,9 +59,9 @@ public final class Constants {
         }
 
         public class ScoringSpeeds {
-            public static double coralIntake = -0.6;
+            public static double coralIntake = -0.5;
             public static double coralOutake = -0.558;
-            public static double coralOutake2 = - .2418; //-0.418;
+            public static double coralOutake2 = -.2418;//- .2418; //-0.418;
             public static double coralAlgae = 0.7;
         }
 
@@ -72,7 +72,7 @@ public final class Constants {
     }
 
     public static class Limelight {
-        public static final boolean kUseLimelight = true;
+        public static final boolean kUseLimelight = false;
         public static final String kLimelightName = "limelight";
     }
 

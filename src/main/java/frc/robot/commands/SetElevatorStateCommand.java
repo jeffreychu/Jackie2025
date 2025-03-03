@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
 
@@ -15,9 +16,9 @@ public class SetElevatorStateCommand extends Command {
   private ElevatorStates state;
   private double positionThreshold;
   
-  public SetElevatorStateCommand(ElevatorSubsystem elevatorSubsystem , ElevatorStates state) {
+  public SetElevatorStateCommand(ElevatorStates state) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.elevatorSubsystem = elevatorSubsystem;
+    this.elevatorSubsystem = RobotContainer.elevator;
     this.state = state;
     addRequirements(elevatorSubsystem);
   }
@@ -26,7 +27,7 @@ public class SetElevatorStateCommand extends Command {
   @Override
   public void initialize() {
     elevatorSubsystem.setElevatorState(state);
-
+    System.out.println(state);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
