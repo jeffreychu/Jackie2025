@@ -37,12 +37,6 @@
         {
           "type": "named",
           "data": {
-            "name": "Set Elevator HOME"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "No Scoring"
           }
         }

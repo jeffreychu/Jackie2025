@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -15,6 +16,7 @@ public class SetElevatorStateCommand extends Command {
   private ElevatorSubsystem elevatorSubsystem;
   private ElevatorStates state;
   private double positionThreshold;
+  private Debouncer debounce = new Debouncer(0.25);
   
   public SetElevatorStateCommand(ElevatorStates state) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -41,6 +43,6 @@ public class SetElevatorStateCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevatorSubsystem.isAtPosition();
+    return debounce.calculate(elevatorSubsystem.isAtPosition());
   }
 }
