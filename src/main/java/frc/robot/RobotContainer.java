@@ -14,6 +14,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -52,16 +53,13 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController driverJoystick = new CommandXboxController(Constants.kDriverController);
-    private final CommandXboxController operatorJoystick = new CommandXboxController(Constants.kOperatorController);
+    public static final CommandXboxController driverJoystick = new CommandXboxController(Constants.kDriverController);
+    public static final CommandXboxController operatorJoystick = new CommandXboxController(Constants.kOperatorController);
 
     public final static ElevatorSubsystem elevator = new ElevatorSubsystem();
     public final static ScoringSubsystem coralShooter = new ScoringSubsystem();
     public final LEDController ledController = new LEDController();
     public final static CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-
-    //NAMED COMMANDS FOR AUTO
-    
 
     private final SendableChooser<Command> autoChooser;
 
@@ -149,17 +147,17 @@ public class RobotContainer {
         // elevator.setElevatorState(ElevatorStates.L3Algae)))
         // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
 
-        // Run SysId routines when holding back/start and X/Y.
-        // Note that each routine should be run exactly once in a single log.
-        // driverJoystick.back().and(driverJoystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        // driverJoystick.back().and(driverJoystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        // driverJoystick.start().and(driverJoystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        // driverJoystick.start().and(driverJoystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-
         // reset the field-centric heading on left bumper press
         driverJoystick.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+
+        //Vibrates controller is GP is loaded
+        if(coralShooter.isLoaded()){
+           driverJoystick.setRumble(RumbleType.kBothRumble, Constants.driverRumbleValue);
+        }else if(!coralShooter.isLoaded()){
+           driverJoystick.setRumble(RumbleType.kBothRumble, 0);
+        }
     }
 
     public Command getAutonomousCommand() {

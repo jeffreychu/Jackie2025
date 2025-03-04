@@ -8,7 +8,10 @@ public final class Constants {
 
     public static final int kDriverController = 0;
     public static final int kOperatorController = 0; // TODO change
+    
+    public static final double driverRumbleValue = 0.60;
 
+    /******* SWERVE DRIVE MOTORS ******/
     public static class DriveMotors {
         // DRIVE MOTOR ID'S
         public static final int frontRightDriveID = 2;
@@ -23,6 +26,7 @@ public final class Constants {
         public static final int backLeftSteerID = 7;
     }
 
+    /******* ELEVATOR SUBSYSTEM ********/
     public static class Elevator {
         public static final double positionThreshold = 0.01;
         public static class Motors {
@@ -51,6 +55,8 @@ public final class Constants {
 
         }
     }
+
+    /******* SCORING SUBSYSTEM *******/
 
     public static class Scoring {
         public static class Sensors {

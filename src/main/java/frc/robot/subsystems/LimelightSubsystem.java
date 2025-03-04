@@ -4,11 +4,43 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 
 public class LimelightSubsystem extends SubsystemBase {
   /** Creates a new Limelight. */
-  public LimelightSubsystem() {}
+  
+  private final String LLname;
+
+
+  public LimelightSubsystem() {
+    LLname = Constants.Limelight.kLimelightName;
+  }
+
+  public Pose2d getRecentTagPose2d(){
+    return LimelightHelpers.getLatestResults(LLname).getBotPose2d();
+  }
+  
+  public Pose3d getRecentTagPose3d(){
+    return LimelightHelpers.getLatestResults(LLname).getBotPose3d();
+  }
+
+  public Rotation2d getRecentTagRotation2d(){
+    return LimelightHelpers.getLatestResults(LLname).getBotPose2d().getRotation();
+  }
+
+  public Rotation3d getRecentTagRotation3d(){
+    return LimelightHelpers.getLatestResults(LLname).getBotPose3d().getRotation();
+  }
+
+  //TODO implement logic for aligning to score and movement there
+
+
 
   @Override
   public void periodic() {

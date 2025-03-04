@@ -53,6 +53,10 @@ public class ScoringSubsystem extends SubsystemBase {
     this.currentState = state;
   }
 
+  public ScoringStates getScoringState(){
+    return currentState;
+  }
+
   public boolean isLoaded() {
     return (leftSensor.getDistance().getValueAsDouble() < sensorThreshold
         || rightSensor.getDistance().getValueAsDouble() < sensorThreshold);

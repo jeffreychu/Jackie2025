@@ -37,11 +37,10 @@ public class LEDController extends SubsystemBase {
 
     public enum LEDStates {
         DEFAULT,
-       // DISABLE,
-      //  REVVING,
-        SHOOTING,
+        OUTAKING,
         INTAKING,
-        JAM_PIECE,
+        LOADED,
+        DISABLED,
         NONE
 
     }
@@ -116,22 +115,34 @@ public class LEDController extends SubsystemBase {
         candle.animate(null);
         candle.setLEDs(255, 255, 255, 0, 0, numLEDs);
     }
-
+    
     public void setColorGreenBlink() {
         candle.animate(new StrobeAnimation(0, 255, 0, 0, 0.3, numLEDs));
     }
-
+    
     public void setColorOrangeBlink() {
         candle.animate(new StrobeAnimation(255, 92, 0, 0, 0.3, numLEDs));
     }
-
+    public void setColorYellowBlink() {
+        candle.animate(new StrobeAnimation(255, 255, 0, 0, 0.3, numLEDs));
+    }
+    
     public void setColorBlueBlink() {
         candle.animate(new StrobeAnimation(0, 0, 255, 0, 0.3, numLEDs));
-
+        
     }
-
+    
     public void setColorWhiteBlink() {
         candle.animate(new StrobeAnimation(255, 255, 255, 0, 0.3, numLEDs));
+    }
+    
+    public void setColorCyan(){
+        candle.animate(null);
+        candle.setLEDs(0, 255, 255, 0, 0, numLEDs);
+    }
+    
+    public void setColorCyanBlink() {
+        candle.animate(new StrobeAnimation(0, 255, 255, 0, 0.3, numLEDs));
     }
 
     public void setColorRedBlink() {
@@ -167,27 +178,41 @@ public class LEDController extends SubsystemBase {
         candle.setLEDs(numLEDs, numLEDs, numLEDs, 0, 0, numLEDs);
     }
 
-    // private void updateStates() {
-    //     if (Robot.isDisabled) {
-    //         ledState = LEDStates.DISABLE;
-    //     } else if (RobotContainer.shooter.getState() == ShooterStates.SPEAKER
-    //             || RobotContainer.shooter.getState() == ShooterStates.FERRY
-    //             || RobotContainer.shooter.getState() == ShooterStates.RATCHET_FERRY) {
-    //         ledState = LEDStates.REVVING;
-    //     } else if (RobotContainer.intake.detectedGP() || RobotContainer.tramp.detectedGP()
-    //             || RobotContainer.shooter.detectedGP()) {
-    //         ledState = LEDStates.HAS_PIECE;
-    //     } else if (!(RobotContainer.intake.detectedGP() || RobotContainer.tramp.detectedGP()
-    //             || RobotContainer.shooter.detectedGP())) {
-    //         ledState = LEDStates.DEFAULT;
-    //     } else {
-    //         ledState = LEDStates.DEFAULT;
-    //     }
-    // }
+    private void updateStates() {
+        if (Robot.isDisabled) {
+            ledState = LEDStates.DISABLED;
+        } else if (!RobotContainer.coralShooter.isLoaded() && RobotContainer.coralShooter.getScoringState() == ScoringStates.INTAKE) {
+            ledState = LEDStates.INTAKING;
+        } else if (RobotContainer.coralShooter.isLoaded()) {
+            ledState = LEDStates.LOADED;
+        } else if (RobotContainer.coralShooter.getScoringState() == ScoringStates.OUTAKE || RobotContainer.coralShooter.getScoringState() == ScoringStates.OUTAKE2) {
+            ledState = LEDStates.OUTAKING;
+        } else {
+            ledState = LEDStates.DEFAULT;
+        }
+    }
 
     @Override
     public void periodic() {
-        // updateStates();
-        setRainbowAnimation(numLEDs, currentTime, currentRumblestate);
+        updateStates();
+        
+        switch (ledState) {
+            case DISABLED:
+                setColorWhiteBlink();
+                break;
+            case INTAKING:
+                setColorBlueBlink();
+                break;
+            case OUTAKING:
+                setColorYellowBlink();
+                break;
+            case LOADED:
+                setColorPurple();
+                break;
+            case DEFAULT: 
+            default:
+                setColorCyan();
+                break;
+        }
     }
 }
