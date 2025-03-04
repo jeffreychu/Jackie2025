@@ -1,5 +1,6 @@
 # 1880 Robot Documentation
 
+![images](https://github.com/user-attachments/assets/23d7d2bf-08ae-4115-a0bf-648eb5bc3c0b)
 
 ## CommandSwerveDrivetrain 
 
