@@ -39,6 +39,8 @@ public class LEDController extends SubsystemBase {
         DEFAULT,
         OUTAKING,
         INTAKING,
+        STORED_RIGHT,
+        STORED_LEFT,
         LOADED,
         DISABLED,
         NONE
@@ -200,6 +202,12 @@ public class LEDController extends SubsystemBase {
             case DISABLED:
                 setColorWhiteBlink();
                 break;
+            case STORED_RIGHT:
+                setColorGreen();
+                break;
+            case STORED_LEFT:
+                setColorOrange();
+                break;        
             case INTAKING:
                 setColorBlueBlink();
                 break;

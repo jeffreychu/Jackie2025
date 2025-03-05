@@ -33,6 +33,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LEDController;
 import frc.robot.subsystems.ScoringSubsystem.ScoringStates;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
+import frc.robot.subsystems.LEDController.LEDStates;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
@@ -143,6 +144,19 @@ public class RobotContainer {
         operatorJoystick.y().whileTrue(Commands.runOnce(() -> elevator.setElevatorState(ElevatorStates.L3)));
         // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
 
+        operatorJoystick.rightBumper().onTrue(Commands.runOnce(() -> ledController.setLEDState(LEDStates.STORED_RIGHT)));
+        // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
+
+        operatorJoystick.leftBumper().onTrue(Commands.runOnce(() -> ledController.setLEDState(LEDStates.STORED_LEFT)));
+        // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
+
+   /*      operatorJoystick.rightBumper().onTrue(
+                Commands.runOnce(()-> ledController.setLEDState(LEDStates.STORED_RIGHT)));
+
+
+        operatorJoystick.leftBumper().onTrue(
+                Commands.runOnce(()-> ledController.setLEDState(LEDStates.STORED_LEFT)));        
+*/
         // operatorJoystick.x().whileTrue(Commands.run(() ->
         // elevator.setElevatorState(ElevatorStates.L3Algae)))
         // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
