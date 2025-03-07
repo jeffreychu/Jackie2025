@@ -27,8 +27,10 @@ import frc.robot.commands.IntakingCommand;
 import frc.robot.commands.SetElevatorStateCommand;
 import frc.robot.commands.SetScoringStateCommand;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ScoringSubsystem;
+import frc.robot.subsystems.ClimbSubsystem.ClimberStates;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LEDController;
 import frc.robot.subsystems.ScoringSubsystem.ScoringStates;
@@ -60,6 +62,7 @@ public class RobotContainer {
     public final static ElevatorSubsystem elevator = new ElevatorSubsystem();
     public final static ScoringSubsystem coralShooter = new ScoringSubsystem();
     public final LEDController ledController = new LEDController();
+    public final static ClimbSubsystem climb = new ClimbSubsystem();
     public final static CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     private final SendableChooser<Command> autoChooser;
@@ -149,6 +152,10 @@ public class RobotContainer {
 
         operatorJoystick.leftBumper().onTrue(Commands.runOnce(() -> ledController.setLEDState(LEDStates.STORED_LEFT)));
         // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
+
+        operatorJoystick.rightTrigger().onTrue(Commands.runOnce(() -> climb.setClimberState(ClimberStates.HOME)));
+
+        operatorJoystick.leftTrigger().onTrue(Commands.runOnce(() -> climb.setClimberState(ClimberStates.TARGET)));
 
    /*      operatorJoystick.rightBumper().onTrue(
                 Commands.runOnce(()-> ledController.setLEDState(LEDStates.STORED_RIGHT)));

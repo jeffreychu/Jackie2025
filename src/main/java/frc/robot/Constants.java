@@ -7,7 +7,7 @@ package frc.robot;
 public final class Constants {
 
     public static final int kDriverController = 0;
-    public static final int kOperatorController = 0; // TODO change
+    public static final int kOperatorController = 1; // TODO change
     
     public static final double driverRumbleValue = 0.60;
 
@@ -85,5 +85,27 @@ public final class Constants {
     public static class LED {
         public static final int CANdleID = 16;
     }
+
+        /******* CLIMBER SUBSYSTEM ********/
+        public static class Climber {
+            public static final double positionThreshold = 0.01;
+            public static class Motors {
+                // CLIMBER MOTOR ID'S
+                public static final int climberMotorID = 20; //set value
+    
+            }
+    
+            public static class Sensors {
+                // SENSORS ID, port is on the roborio
+                public static final int climberSensor = 0;
+    
+            }
+    
+            public class ClimberStatePositions {
+                //set values
+                public static final double motorHomePosition = 0.0; 
+                public static final double motorTargetPosition = 0.0;
+            }
+        }
 
 }

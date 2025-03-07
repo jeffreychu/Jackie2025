@@ -183,6 +183,10 @@ public class LEDController extends SubsystemBase {
     private void updateStates() {
         if (Robot.isDisabled) {
             ledState = LEDStates.DISABLED;
+        } else if (RobotContainer.operatorJoystick.rightBumper().getAsBoolean()){
+            ledState = LEDStates.STORED_RIGHT;
+        } else if (RobotContainer.operatorJoystick.leftBumper().getAsBoolean()){
+            ledState = LEDStates.STORED_LEFT;
         } else if (!RobotContainer.coralShooter.isLoaded() && RobotContainer.coralShooter.getScoringState() == ScoringStates.INTAKE) {
             ledState = LEDStates.INTAKING;
         } else if (RobotContainer.coralShooter.isLoaded()) {
