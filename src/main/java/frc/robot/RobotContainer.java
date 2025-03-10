@@ -52,7 +52,7 @@ public class RobotContainer {
 
     private final SwerveRequest.FieldCentricFacingAngle driveAngle = new SwerveRequest.FieldCentricFacingAngle()
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage).withHeadingPID(3, 0, 0);
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -113,6 +113,7 @@ public class RobotContainer {
                                 coralShooter)))
                 .onFalse(Commands.run(() -> coralShooter.setScoringState(ScoringStates.NONE),
                         coralShooter));
+        
         // operatorJoystick.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(
         // new RunCommand(() -> coralShooter.setScoringState(ScoringStates.ALGAE),
         // coralShooter)

@@ -29,8 +29,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.RobotContainer;
 import frc.robot.commands.IntakingCommand;
 import frc.robot.commands.SetElevatorStateCommand;
 import frc.robot.commands.SetScoringStateCommand;
@@ -64,6 +67,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+
+    private final LimelightSubsystem limelight = new LimelightSubsystem();
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -350,6 +355,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Matrix<N3, N1> visionMeasurementStdDevs
     ) {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
+    }
+
+    public Command getDriveCommand(CommandXboxController joystick , CommandSwerveDrivetrain driveTrain, SwerveRequest.FieldCentric drive ,SwerveRequest.FieldCentricFacingAngle driveAngle,  ScoringSubsystem scoring , double MaxSpeed , double MaxAngularRate){
+        return new InstantCommand(()->{
+           if(joystick.rightTrigger(0.1).getAsBoolean() && scoring.isLoaded()){ // It might not have to be loaded
+                driveTrain.applyRequest(() -> driveAngle.withVelocityX(-joystick.getLeftY() * MaxSpeed)
+                            .withVelocityY(-joystick.getLeftX() * MaxAngularRate)
+                            .withTargetDirection(limelight.getRecentTagRotation2d())); //Check
+            }else {
+                driveTrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) 
+                        .withVelocityY(-joystick.getLeftX() * MaxSpeed) 
+                        .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
+                );
+
+           } 
+        } , scoring , driveTrain); //TODO this might cause errors
     }
 
     
