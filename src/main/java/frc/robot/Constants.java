@@ -47,7 +47,7 @@ public final class Constants {
             public static final double rightHomePostion = 0.0;
 
             public static final double coralIntakePostion = 7.8;
-            public static final double L1Position = 8.0;
+            public static final double L1Position = 7.9;
             public static final double L2Position = 11.76;
             public static final double L3Position = 18.5;
 
@@ -66,7 +66,9 @@ public final class Constants {
 
         public class ScoringSpeeds {
             public static double coralIntake = -0.5;
-            public static double coralOutake = -0.558;
+            public static double coralOutake = -0.338;
+            
+            public static double coralOutake2Auto = -.2018;//- .2418; //-0.418;
             public static double coralOutake2 = -.2418;//- .2418; //-0.418;
             public static double coralAlgae = 0.7;
         }
@@ -75,6 +77,12 @@ public final class Constants {
             // CORAL SHOOTER MOTOR
             public static final int scoringMotorID = 17;
         }
+    }
+
+    public static class SwerveConstants {
+        public static final double kP = 0.10;
+        public static final double kI = 0.0;
+        public static final double kD = 0.0;
     }
 
     public static class Limelight {
@@ -97,14 +105,14 @@ public final class Constants {
     
             public static class Sensors {
                 // SENSORS ID, port is on the roborio
-                public static final int climberSensor = 0;
+                public static final int climberSensor = 1;
     
             }
     
             public class ClimberStatePositions {
                 //set values
                 public static final double motorHomePosition = 0.0; 
-                public static final double motorTargetPosition = 0.0;
+                public static final double motorTargetPosition = 7.4;
             }
         }
 
