@@ -43,15 +43,15 @@ public class ClimbSubsystem extends SubsystemBase {
 
   //change values
     TalonFXConfiguration configs = new TalonFXConfiguration();
-    configs.Slot0.kP = 50.0;
+    configs.Slot0.kP = 1.25;
     configs.Slot0.kI = 0;
-    configs.Slot0.kD = 12.5;
+    configs.Slot0.kD = 0.025;
     configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     //change values
-    configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0.0;
+    configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 7.4;
     configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0.0;
-    configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
-    configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
+    configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+    configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
     climberMotor.getConfigurator().apply(configs);
 
@@ -92,6 +92,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("Has Zeroed", hasZeroed);
     // This method will be called once per scheduler run
     switch (currentState) {
       case HOME:

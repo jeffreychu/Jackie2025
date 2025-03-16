@@ -20,6 +20,7 @@ public class ScoringSubsystem extends SubsystemBase {
     INTAKE,
     OUTAKE,
     OUTAKE2,
+    OUTAKE2AUTO,
     ALGAE,
   }
 
@@ -78,6 +79,9 @@ public class ScoringSubsystem extends SubsystemBase {
         break;
       case OUTAKE2:
         setScoringSpeed(Constants.Scoring.ScoringSpeeds.coralOutake2, false);
+        break;
+      case OUTAKE2AUTO:
+        setScoringSpeed(Constants.Scoring.ScoringSpeeds.coralOutake2Auto, false);
         break;
       case ALGAE:
         setScoringSpeed(Constants.Scoring.ScoringSpeeds.coralAlgae, false);

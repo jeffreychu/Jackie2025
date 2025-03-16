@@ -17,6 +17,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
@@ -34,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.RobotContainer;
+import frc.robot.Constants;
 import frc.robot.commands.IntakingCommand;
 import frc.robot.commands.SetElevatorStateCommand;
 import frc.robot.commands.SetScoringStateCommand;
@@ -52,6 +54,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+
+    private static final PIDController xController = new PIDController(Constants.SwerveConstants.kP, Constants.SwerveConstants.kI, Constants.SwerveConstants.kD);
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -221,7 +225,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         NamedCommands.registerCommand("Intake", new IntakingCommand());
         NamedCommands.registerCommand("Outake", new SetScoringStateCommand(ScoringStates.OUTAKE));
-        NamedCommands.registerCommand("Slow Outake", new SetScoringStateCommand(ScoringStates.OUTAKE2));
+        NamedCommands.registerCommand("Slow Outake", new SetScoringStateCommand(ScoringStates.OUTAKE2AUTO));
         NamedCommands.registerCommand("No Scoring", new SetScoringStateCommand(ScoringStates.NONE));
 
         try {
@@ -369,6 +373,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                         .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
                 );
         }
+    }
+
+    public double getXOFfsetMovement(double currentX) {
+        SmartDashboard.putNumber("xController", -xController.calculate(currentX, 0));
+        return xController.calculate(currentX, 0);
     }
 
     

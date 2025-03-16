@@ -40,26 +40,32 @@ import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
 import frc.robot.subsystems.LEDController.LEDStates;
 
 public class RobotContainer {
-    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
-                                                                                  // speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per
-                                                                                      // second
-    // max angular velocity // increase RadiansPerSecond to increase turning speed
+        private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
+                                                                                      // speed
+        private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per
+                                                                                          // second
+        // max angular velocity // increase RadiansPerSecond to increase turning speed
 
-    /* Setting up bindings for necessary control of the swerve drive platform */
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive
-                                                                     // motors
+        /* Setting up bindings for necessary control of the swerve drive platform */
+        private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+                        .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+                        .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive
+                                                                                 // motors
 
-    private final SwerveRequest.RobotCentricFacingAngle driveAngle = new SwerveRequest.RobotCentricFacingAngle()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage).withHeadingPID(10, 0, 0);
+        private final SwerveRequest.RobotCentric driveRobotCentric = new SwerveRequest.RobotCentric()
+                        .withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+                        .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
-    private final Telemetry logger = new Telemetry(MaxSpeed);
+        private final SwerveRequest.RobotCentricFacingAngle driveAngle = new SwerveRequest.RobotCentricFacingAngle()
+                        .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+                        .withDriveRequestType(DriveRequestType.OpenLoopVoltage).withHeadingPID(10, 0, 0);
 
-    public static final CommandXboxController driverJoystick = new CommandXboxController(Constants.kDriverController);
-    public static final CommandXboxController operatorJoystick = new CommandXboxController(Constants.kOperatorController);
+        private final Telemetry logger = new Telemetry(MaxSpeed);
+
+        public static final CommandXboxController driverJoystick = new CommandXboxController(
+                        Constants.kDriverController);
+        public static final CommandXboxController operatorJoystick = new CommandXboxController(
+                        Constants.kOperatorController);
 
     public final static ElevatorSubsystem elevator = new ElevatorSubsystem();
     public final static ScoringSubsystem coralShooter = new ScoringSubsystem();
@@ -71,14 +77,14 @@ public class RobotContainer {
     private final PIDController xController = new PIDController(.1, 0, 0);
     private final PIDController yController = new PIDController(.1, 0, 0);
 
-    private final SendableChooser<Command> autoChooser;
+        private final SendableChooser<Command> autoChooser;
 
-    public RobotContainer() {
-        autoChooser = AutoBuilder.buildAutoChooser("Tests");
-        SmartDashboard.putData("Auto Mode", autoChooser);
+        public RobotContainer() {
+                autoChooser = AutoBuilder.buildAutoChooser("Tests");
+                SmartDashboard.putData("Auto Mode", autoChooser);
 
-        configureBindings();
-    }
+                configureBindings();
+        }
 
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
@@ -99,10 +105,10 @@ public class RobotContainer {
         //         .withVelocityY(-driverJoystick.getLeftX() * MaxAngularRate)
         //         .withTargetDirection(limelight.getLatestTagRotation()))); //Check
 
-        // driverJoystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        // driverJoystick.b().whileTrue(drivetrain.applyRequest(
-        // () -> point.withModuleDirection(new Rotation2d(-driverJoystick.getLeftY(),
-        // -driverJoystick.getLeftX()))));
+                // driverJoystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
+                // driverJoystick.b().whileTrue(drivetrain.applyRequest(
+                // () -> point.withModuleDirection(new Rotation2d(-driverJoystick.getLeftY(),
+                // -driverJoystick.getLeftX()))));
 
         // Commands.run(() -> elevator.setElevatorState(ElevatorStates.INTAKE)
         driverJoystick.rightBumper().whileTrue(
@@ -127,65 +133,70 @@ public class RobotContainer {
         // coralShooter)
         // ));
 
-        driverJoystick.leftBumper().whileTrue(
-                new RunCommand(() -> coralShooter.setScoringState(ScoringStates.OUTAKE), coralShooter))
-                .onFalse(
-                        new RunCommand(() -> coralShooter.setScoringState(ScoringStates.NONE),
-                                coralShooter));
+                driverJoystick.leftBumper().whileTrue(
+                                new RunCommand(() -> coralShooter.setScoringState(ScoringStates.OUTAKE), coralShooter))
+                                .onFalse(
+                                                new RunCommand(() -> coralShooter.setScoringState(ScoringStates.NONE),
+                                                                coralShooter));
 
-        driverJoystick.leftTrigger().whileTrue(
-                new RunCommand(() -> coralShooter.setScoringState(ScoringStates.OUTAKE2), coralShooter))
-                .onFalse(
-                        new RunCommand(() -> coralShooter.setScoringState(ScoringStates.NONE),
-                                coralShooter));
+                driverJoystick.leftTrigger().whileTrue(
+                                new RunCommand(() -> coralShooter.setScoringState(ScoringStates.OUTAKE2), coralShooter))
+                                .onFalse(
+                                                new RunCommand(() -> coralShooter.setScoringState(ScoringStates.NONE),
+                                                                coralShooter));
 
-        operatorJoystick.x().whileTrue(Commands.runOnce(() -> elevator.setElevatorState(ElevatorStates.HOME)));
+                operatorJoystick.x().whileTrue(Commands.runOnce(() -> elevator.setElevatorState(ElevatorStates.HOME)));
 
-        operatorJoystick.a().whileTrue(Commands.runOnce(() -> elevator.setElevatorState(ElevatorStates.L1)));
-        // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
+                operatorJoystick.a().whileTrue(Commands.runOnce(() -> elevator.setElevatorState(ElevatorStates.L1)));
+                // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
 
-        operatorJoystick.b().whileTrue(Commands.runOnce(() -> elevator.setElevatorState(ElevatorStates.L2)));
-        // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
+                operatorJoystick.b().whileTrue(Commands.runOnce(() -> elevator.setElevatorState(ElevatorStates.L2)));
+                // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
 
-        // operatorJoystick.y().whileTrue(Commands.runOnce(() -> elevator.setElevatorState(ElevatorStates.L3)));
-        // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
+                // operatorJoystick.y().whileTrue(Commands.runOnce(() -> elevator.setElevatorState(ElevatorStates.L3)));
+                // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
 
-        operatorJoystick.rightBumper().onTrue(Commands.runOnce(() -> ledController.setLEDState(LEDStates.STORED_RIGHT)));
-        // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
+                operatorJoystick.rightBumper()
+                                .onTrue(Commands.runOnce(() -> ledController.setLEDState(LEDStates.STORED_RIGHT)));
+                // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
 
-        operatorJoystick.leftBumper().onTrue(Commands.runOnce(() -> ledController.setLEDState(LEDStates.STORED_LEFT)));
-        // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
+                operatorJoystick.leftBumper()
+                                .onTrue(Commands.runOnce(() -> ledController.setLEDState(LEDStates.STORED_LEFT)));
+                // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
 
-        operatorJoystick.rightTrigger().onTrue(Commands.runOnce(() -> climb.setClimberState(ClimberStates.HOME)));
+                operatorJoystick.rightTrigger()
+                                .onTrue(Commands.runOnce(() -> climb.setClimberState(ClimberStates.HOME)));
 
-        operatorJoystick.leftTrigger().onTrue(Commands.runOnce(() -> climb.setClimberState(ClimberStates.TARGET)));
+                operatorJoystick.leftTrigger()
+                                .onTrue(Commands.runOnce(() -> climb.setClimberState(ClimberStates.TARGET)));
 
-   /*      operatorJoystick.rightBumper().onTrue(
-                Commands.runOnce(()-> ledController.setLEDState(LEDStates.STORED_RIGHT)));
+                /*
+                 * operatorJoystick.rightBumper().onTrue(
+                 * Commands.runOnce(()-> ledController.setLEDState(LEDStates.STORED_RIGHT)));
+                 * 
+                 * 
+                 * operatorJoystick.leftBumper().onTrue(
+                 * Commands.runOnce(()-> ledController.setLEDState(LEDStates.STORED_LEFT)));
+                 */
+                // operatorJoystick.x().whileTrue(Commands.run(() ->
+                // elevator.setElevatorState(ElevatorStates.L3Algae)))
+                // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
 
+                // reset the field-centric heading on left bumper press
+                driverJoystick.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-        operatorJoystick.leftBumper().onTrue(
-                Commands.runOnce(()-> ledController.setLEDState(LEDStates.STORED_LEFT)));        
-*/
-        // operatorJoystick.x().whileTrue(Commands.run(() ->
-        // elevator.setElevatorState(ElevatorStates.L3Algae)))
-        // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
+                drivetrain.registerTelemetry(logger::telemeterize);
 
-        // reset the field-centric heading on left bumper press
-        driverJoystick.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-
-        drivetrain.registerTelemetry(logger::telemeterize);
-
-        //Vibrates controller is GP is loaded
-        if(coralShooter.isLoaded()){
-           driverJoystick.setRumble(RumbleType.kBothRumble, Constants.driverRumbleValue);
-        }else if(!coralShooter.isLoaded()){
-           driverJoystick.setRumble(RumbleType.kBothRumble, 0);
+                // Vibrates controller is GP is loaded
+                if (coralShooter.isLoaded()) {
+                        driverJoystick.setRumble(RumbleType.kBothRumble, Constants.driverRumbleValue);
+                } else if (!coralShooter.isLoaded()) {
+                        driverJoystick.setRumble(RumbleType.kBothRumble, 0);
+                }
         }
-    }
 
-    public Command getAutonomousCommand() {
-        /* Run the path selected from the auto chooser */
-        return autoChooser.getSelected();
-    }
+        public Command getAutonomousCommand() {
+                /* Run the path selected from the auto chooser */
+                return autoChooser.getSelected();
+        }
 }

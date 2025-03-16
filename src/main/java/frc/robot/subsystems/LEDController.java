@@ -35,6 +35,7 @@ public class LEDController extends SubsystemBase {
     private boolean prevRumbleState;
     private boolean currentRumblestate;
     private double currentTime;
+    private LEDStates prevState;
 
     public enum LEDStates {
         DEFAULT,
@@ -118,6 +119,19 @@ public class LEDController extends SubsystemBase {
         candle.animate(null);
         candle.setLEDs(255, 255, 255, 0, 0, numLEDs);
     }
+
+    public void setColorWhiteRight() {
+        candle.animate(null);
+        candle.setLEDs(255, 255, 255, 0, 26, 18);
+        candle.setLEDs(0, 0, 0, 0, 0, 26);
+    }
+
+    public void setColorWhiteLeft() {
+
+        candle.animate(null);
+        candle.setLEDs(255, 255, 255, 0, 0, 26);
+        candle.setLEDs(0, 0, 0, 0, 26, 18);
+    }
     
     public void setColorGreenBlink() {
         candle.animate(new StrobeAnimation(0, 255, 0, 0, 0.3, numLEDs));
@@ -191,16 +205,20 @@ public class LEDController extends SubsystemBase {
             ledState = LEDStates.DISABLED;
         } else if (RobotContainer.operatorJoystick.rightBumper().getAsBoolean()){
             ledState = LEDStates.STORED_RIGHT;
+            prevState = LEDStates.STORED_RIGHT;
         } else if (RobotContainer.operatorJoystick.leftBumper().getAsBoolean()){
             ledState = LEDStates.STORED_LEFT;
-        } else if (!RobotContainer.coralShooter.isLoaded() && RobotContainer.coralShooter.getScoringState() == ScoringStates.INTAKE) {
-            ledState = LEDStates.INTAKING;
+            prevState = LEDStates.STORED_LEFT;
         } else if (RobotContainer.coralShooter.isLoaded()) {
             ledState = LEDStates.LOADED;
         } else if (RobotContainer.coralShooter.getScoringState() == ScoringStates.OUTAKE || RobotContainer.coralShooter.getScoringState() == ScoringStates.OUTAKE2) {
-            ledState = LEDStates.OUTAKING;
+            if (prevState != null) {
+                ledState = prevState;
+            } else {
+                ledState = LEDStates.DEFAULT;
+            }
         } else {
-            ledState = LEDStates.DEFAULT;
+            // ledState = LEDStates.DEFAULT;
         }
     }
 
@@ -213,10 +231,11 @@ public class LEDController extends SubsystemBase {
                 setLarsonAnmation(255, 255 , 255, 0, 0.5, LarsonAnimation.BounceMode.Center, numLEDsNonCandle, 8);
                 break;
             case STORED_RIGHT:
-                setColorGreen();
+                
+                setColorWhiteRight();
                 break;
             case STORED_LEFT:
-                setColorOrange();
+                setColorWhiteLeft();
                 break;        
             case INTAKING:
                 setColorBlueBlink();

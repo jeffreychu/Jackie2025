@@ -43,6 +43,7 @@ public class SetElevatorStateCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println("Elevator Done");
     return debounce.calculate(elevatorSubsystem.isAtPosition());
   }
 }
