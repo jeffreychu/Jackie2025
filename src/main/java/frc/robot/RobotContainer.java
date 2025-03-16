@@ -13,6 +13,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -33,6 +34,7 @@ import frc.robot.subsystems.ScoringSubsystem;
 import frc.robot.subsystems.ClimbSubsystem.ClimberStates;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LEDController;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ScoringSubsystem.ScoringStates;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
 import frc.robot.subsystems.LEDController.LEDStates;
@@ -50,9 +52,9 @@ public class RobotContainer {
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive
                                                                      // motors
 
-    private final SwerveRequest.FieldCentricFacingAngle driveAngle = new SwerveRequest.FieldCentricFacingAngle()
+    private final SwerveRequest.RobotCentricFacingAngle driveAngle = new SwerveRequest.RobotCentricFacingAngle()
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage).withHeadingPID(3, 0, 0);
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage).withHeadingPID(10, 0, 0);
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -64,6 +66,10 @@ public class RobotContainer {
     public final LEDController ledController = new LEDController();
     public final static ClimbSubsystem climb = new ClimbSubsystem();
     public final static CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final static LimelightSubsystem limelight = new LimelightSubsystem();
+
+    private final PIDController xController = new PIDController(.1, 0, 0);
+    private final PIDController yController = new PIDController(.1, 0, 0);
 
     private final SendableChooser<Command> autoChooser;
 
@@ -78,26 +84,20 @@ public class RobotContainer {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         // This is due to X and Y being in reference to field this Field relative
-        drivetrain.setDefaultCommand(
-                // Drivetrain will execute this command periodically
-                drivetrain.applyRequest(() -> drive.withVelocityX(-driverJoystick.getLeftY() * MaxSpeed) // Drive
-                                                                                                         // forward
-                                                                                                         // with
-                                                                                                         // negative
-                                                                                                         // Y
-                                                                                                         // (forward)
-                        .withVelocityY(-driverJoystick.getLeftX() * MaxSpeed) // Drive left with
-                                                                              // negative X
-                                                                              // (left)
-                        .withRotationalRate(-driverJoystick.getRightX() * MaxAngularRate) // Drive
-                                                                                          // counterclockwise
-                                                                                          // with
-                                                                                          // negative
-                                                                                          // X
-                                                                                          // (left)
-                ));
+        drivetrain.setDefaultCommand(drivetrain.applyRequest(() -> drive.withVelocityX(-driverJoystick.getLeftY() * MaxSpeed) 
+        .withVelocityY(-driverJoystick.getLeftX() * MaxSpeed) 
+        .withRotationalRate(-driverJoystick.getRightX() * MaxAngularRate)));
         // elevator.setDefaultCommand(Commands.run(() ->
         // elevator.setElevatorState(ElevatorStates.HOME)));
+
+        driverJoystick.rightTrigger(0.1).whileTrue(
+                drivetrain.applyRequest(() -> driveAngle.withVelocityY(xController.calculate(limelight.getTX()))
+                .withVelocityX(-driverJoystick.getLeftY() * MaxSpeed)
+                .withTargetDirection(limelight.getLatestTagRotation()))); //Check
+        // driverJoystick.rightTrigger(0.1).whileTrue(
+        //         drivetrain.applyRequest(() -> driveAngle.withVelocityX(-driverJoystick.getLeftY() * MaxSpeed)
+        //         .withVelocityY(-driverJoystick.getLeftX() * MaxAngularRate)
+        //         .withTargetDirection(limelight.getLatestTagRotation()))); //Check
 
         // driverJoystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         // driverJoystick.b().whileTrue(drivetrain.applyRequest(
@@ -113,6 +113,8 @@ public class RobotContainer {
                                 coralShooter)))
                 .onFalse(Commands.run(() -> coralShooter.setScoringState(ScoringStates.NONE),
                         coralShooter));
+
+        
         
         // operatorJoystick.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(
         // new RunCommand(() -> coralShooter.setScoringState(ScoringStates.ALGAE),
@@ -145,7 +147,7 @@ public class RobotContainer {
         operatorJoystick.b().whileTrue(Commands.runOnce(() -> elevator.setElevatorState(ElevatorStates.L2)));
         // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
 
-        operatorJoystick.y().whileTrue(Commands.runOnce(() -> elevator.setElevatorState(ElevatorStates.L3)));
+        // operatorJoystick.y().whileTrue(Commands.runOnce(() -> elevator.setElevatorState(ElevatorStates.L3)));
         // .onFalse(Commands.run(() -> elevator.setElevatorState(ElevatorStates.HOME)));
 
         operatorJoystick.rightBumper().onTrue(Commands.runOnce(() -> ledController.setLEDState(LEDStates.STORED_RIGHT)));

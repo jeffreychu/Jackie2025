@@ -46,6 +46,7 @@ public final class Constants {
             public static final double leftHomePostion = 0.0;
             public static final double rightHomePostion = 0.0;
 
+            public static final double trackingPosition = 1.50;
             public static final double coralIntakePostion = 7.8;
             public static final double L1Position = 7.9;
             public static final double L2Position = 11.76;

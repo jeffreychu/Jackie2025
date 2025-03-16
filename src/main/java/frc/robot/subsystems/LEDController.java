@@ -26,7 +26,8 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.ScoringSubsystem.ScoringStates;;
 
 public class LEDController extends SubsystemBase {
-    private final int numLEDs = 100;
+    private final int numLEDs = 44;
+    private final int numLEDsNonCandle = 36;
 
     private CANdle candle;
     private LEDStates ledState;
@@ -142,6 +143,11 @@ public class LEDController extends SubsystemBase {
         candle.animate(null);
         candle.setLEDs(0, 255, 255, 0, 0, numLEDs);
     }
+
+    // public void setColorCyan(){
+    //     candle.animate(null);
+    //     candle.setLEDs(0, 255, 255, 0, 0, numLEDs);
+    // }
     
     public void setColorCyanBlink() {
         candle.animate(new StrobeAnimation(0, 255, 255, 0, 0.3, numLEDs));
@@ -155,8 +161,8 @@ public class LEDController extends SubsystemBase {
         candle.animate(new StrobeAnimation(r, g, b, w, speed, numLEDs));
     }
 
-    public void setLarsonAnmation(int r, int g, int b, int w, double speed, BounceMode mode, int size) {
-        candle.animate(new LarsonAnimation(r, g, b, w, speed, numLEDs, mode, size));
+    public void setLarsonAnmation(int r, int g, int b, int w, double speed, BounceMode mode, int size, int offset) {
+        candle.animate(new LarsonAnimation(r, g, b, w, speed, numLEDsNonCandle, mode, size, offset));
     }
 
     public void setColorFlowAnimation(int r, int g, int b, int w, double speed, Direction direction) {
@@ -204,7 +210,7 @@ public class LEDController extends SubsystemBase {
         
         switch (ledState) {
             case DISABLED:
-                setColorWhiteBlink();
+                setLarsonAnmation(255, 255 , 255, 0, 0.5, LarsonAnimation.BounceMode.Center, numLEDsNonCandle, 8);
                 break;
             case STORED_RIGHT:
                 setColorGreen();
@@ -223,7 +229,7 @@ public class LEDController extends SubsystemBase {
                 break;
             case DEFAULT: 
             default:
-                setColorCyan();
+                setColorBlue();
                 break;
         }
     }

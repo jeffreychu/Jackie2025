@@ -22,6 +22,7 @@ import frc.robot.Constants;
 public class ElevatorSubsystem extends SubsystemBase {
   public enum ElevatorStates {
     HOME,
+    TRACKING,
     IDLE,
     INTAKE,
     L1,
@@ -113,8 +114,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   
     switch (currentState) {
       case HOME:
-        setElevatorPosition(Constants.Elevator.ElevatorStatePositions.leftHomePostion);
-        setElevatorPosition(Constants.Elevator.ElevatorStatePositions.rightHomePostion);
+        setElevatorPosition(Constants.Elevator.ElevatorStatePositions.trackingPosition); //TODO change name for state 
         break;
       case INTAKE:
         setElevatorPosition(Constants.Elevator.ElevatorStatePositions.coralIntakePostion);
