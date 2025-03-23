@@ -4,9 +4,13 @@
 
 package frc.robot.subsystems;
 
+import java.security.AlgorithmConstraints;
+
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.Timer;
@@ -15,56 +19,58 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
-public class ScoringSubsystem extends SubsystemBase {
+public class AlgaeSubsystem extends SubsystemBase {
   /** Creates a new CoralSubsystem. */
 
-  public enum ScoringStates {
+  public enum AlgaeStates {
     NONE,
     INTAKE,
     OUTAKE,
-    OUTAKE2,
-    OUTAKE2AUTO,
-    ALGAE,
   }
 
-  private ScoringStates currentState;
-  private TalonFX scoringMotor;
-  private CANrange leftSensor, rightSensor;
-  private double sensorThreshold;
+  private AlgaeStates currentState;
+  private TalonFX algaeMotor;
+  //private CANrange leftSensor, rightSensor;
+  //private double sensorThreshold;
   private Debouncer debouncer;
 
   private double prevTime = Timer.getFPGATimestamp();
-  public ScoringSubsystem() {
-    scoringMotor = new TalonFX(Constants.Scoring.Motors.scoringMotorID, "canivore");
+  public AlgaeSubsystem() {
+    algaeMotor = new TalonFX(Constants.Algae.algaeMotorID, "canivore");
+    
+    TalonFXConfiguration configs = new TalonFXConfiguration();
+    configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    algaeMotor.getConfigurator().apply(configs);
 
-    leftSensor = new CANrange(Constants.Scoring.Sensors.leftSensorID, "canivore");
-    rightSensor = new CANrange(Constants.Scoring.Sensors.rightSensorID, "canivore");
+   // leftSensor = new CANrange(Constants.Scoring.Sensors.leftSensorID, "canivore");
+    //rightSensor = new CANrange(Constants.Scoring.Sensors.rightSensorID, "canivore");
 
-    currentState = ScoringStates.NONE;
+    currentState = AlgaeStates.NONE;
 
-    sensorThreshold = .10;
+    //sensorThreshold = .10;
     debouncer = new Debouncer(.025);
   }
 
-  public void setScoringSpeed(double speed, boolean isLoaded) {
+  public void setAlgaeSpeed(double speed, boolean isLoaded) {
     if (isLoaded == false) {
-      scoringMotor.set(speed);
+      algaeMotor.set(speed);
     } else {
-      scoringMotor.set(0.0);
+      algaeMotor.set(0.0);
     }
   }
 
-  public void setScoringState(ScoringStates state) {
+  public void setAlgaeState(AlgaeStates state) {
     this.currentState = state;
   }
 
-  public ScoringStates getScoringState() {
+  public AlgaeStates getAlgaeState() {
     return currentState;
   }
 
   public boolean isLoaded() {
-    return (leftSensor.getDistance().getValueAsDouble() < sensorThreshold
-        || rightSensor.getDistance().getValueAsDouble() < sensorThreshold);
+    return true;
+ //   return (leftSensor.getDistance().getValueAsDouble() < sensorThreshold
+   //     || rightSensor.getDistance().getValueAsDouble() < sensorThreshold);
   }
 
   @Override
@@ -85,23 +91,20 @@ public class ScoringSubsystem extends SubsystemBase {
 
     switch (currentState) {
       case NONE:
-        setScoringSpeed(0.0, false);
+        setAlgaeSpeed(0.0, false);
         break;
       case INTAKE:
-        setScoringSpeed(Constants.Scoring.ScoringSpeeds.coralIntake, isLoaded());
+        setAlgaeSpeed(Constants.Algae.AlgaeSpeeds.algaeIntake1, false);
         break;
       case OUTAKE:
-        setScoringSpeed(Constants.Scoring.ScoringSpeeds.coralOutake, false);
+        setAlgaeSpeed(Constants.Algae.AlgaeSpeeds.algaeOutake, false);
         break;
-      case OUTAKE2:
-        setScoringSpeed(Constants.Scoring.ScoringSpeeds.coralOutake2, false);
-        break;
-      case OUTAKE2AUTO:
+  /*    case OUTAKE2AUTO:
         setScoringSpeed(Constants.Scoring.ScoringSpeeds.coralOutake2Auto, false);
         break;
       case ALGAE:
         setScoringSpeed(Constants.Scoring.ScoringSpeeds.coralAlgae, false);
-        break;
+        break; */
       default:
         break;
     }

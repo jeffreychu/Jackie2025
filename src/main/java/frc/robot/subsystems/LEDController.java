@@ -26,8 +26,8 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.ScoringSubsystem.ScoringStates;;
 
 public class LEDController extends SubsystemBase {
-    private final int numLEDs = 44;
-    private final int numLEDsNonCandle = 36;
+    private final int numLEDs = 61;
+    private final int numLEDsNonCandle = 53;
 
     private CANdle candle;
     private LEDStates ledState;
@@ -211,7 +211,7 @@ public class LEDController extends SubsystemBase {
             prevState = LEDStates.STORED_LEFT;
         } else if (RobotContainer.coralShooter.isLoaded()) {
             ledState = LEDStates.LOADED;
-        } else if (RobotContainer.coralShooter.getScoringState() == ScoringStates.OUTAKE || RobotContainer.coralShooter.getScoringState() == ScoringStates.OUTAKE2) {
+        } else if (RobotContainer.coralShooter.getScoringState() == ScoringStates.OUTAKE) {
             if (prevState != null) {
                 ledState = prevState;
             } else {

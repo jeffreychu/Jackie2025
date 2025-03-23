@@ -4,6 +4,14 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagDetection;
 import edu.wpi.first.apriltag.AprilTagDetector;
@@ -61,15 +69,16 @@ public class LimelightSubsystem extends SubsystemBase {
     if (lastSeenTagID == -1) {
       return new Rotation2d();
     }
-    System.out.println(lastSeenTagID);
+
+    System.out.print(lastSeenTagID + ": ");
+    System.out.println(field.getTagPose(lastSeenTagID).get().getRotation().toRotation2d().getDegrees());
     return field.getTagPose(lastSeenTagID).get().getRotation().toRotation2d();
     
   }
   //TODO implement logic for aligning to score and movement there
+
+
   
-
-
-
   @Override
   public void periodic() {
     if (lastSeenTagID != LimelightHelpers.getFiducialID(LLname) && LimelightHelpers.getFiducialID(LLname) != -1 && RobotContainer.driverJoystick.getRightTriggerAxis() < 0.1) {

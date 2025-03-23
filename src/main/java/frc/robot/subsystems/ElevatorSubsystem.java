@@ -8,8 +8,10 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -31,8 +33,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     L3Algae,
     L3
   }
+  
+  /* Start at position 0, use slot 0 */
+  private final MotionMagicVoltage m_positionVoltage = new MotionMagicVoltage(0);
 
-  double setPoint = 10.0;
+  public double setPoint = 10.0;
   private TalonFX elevatorLeft;
   private TalonFX elevatorRight;
   private ElevatorStates currentState;
@@ -40,9 +45,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double currentLeftPosition;
   private double currentRightPosition;
   private boolean hasZeroed;
-
-  /* Start at position 0, use slot 0 */
-  private final PositionVoltage m_positionVoltage = new PositionVoltage(0).withSlot(0);
 
   /** Creates a new Elevator. */
   public ElevatorSubsystem() {
@@ -54,14 +56,21 @@ public class ElevatorSubsystem extends SubsystemBase {
     currentState = ElevatorStates.HOME;
 
     TalonFXConfiguration configs = new TalonFXConfiguration();
-    configs.Slot0.kP = 50.0;
+    configs.Slot0.kS = 0.004103;
+    configs.Slot0.kV = 0.13491;
+    configs.Slot0.kA = 0.018893;
+    configs.Slot0.kG = 0.75916;
+    configs.Slot0.kP = 20;//50.0;
     configs.Slot0.kI = 0;
-    configs.Slot0.kD = 12.5;
+    configs.Slot0.kD = 0.0;//12.5;
+    configs.Slot0.withGravityType(GravityTypeValue.Elevator_Static);
+    configs.MotionMagic.MotionMagicAcceleration = 275;//300
+    configs.MotionMagic.MotionMagicCruiseVelocity = 80;
+    configs.MotionMagic.MotionMagicJerk = 350;//600
     configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     configs.Voltage.PeakForwardVoltage = 16;
-    configs.Voltage.PeakReverseVoltage = -2;
-    configs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 1.0;
-    configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 18.51;
+    configs.Voltage.PeakReverseVoltage = -16;
+    configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 18.31;
     configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
     configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
     configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
@@ -114,7 +123,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   
     switch (currentState) {
       case HOME:
-        setElevatorPosition(Constants.Elevator.ElevatorStatePositions.trackingPosition); //TODO change name for state 
+        if(!getElevatorSensor()){
+          elevatorLeft.set(-0.20); 
+        }else{
+          setElevatorState(ElevatorStates.TRACKING);
+        }
         break;
       case INTAKE:
         setElevatorPosition(Constants.Elevator.ElevatorStatePositions.coralIntakePostion);
@@ -128,8 +141,14 @@ public class ElevatorSubsystem extends SubsystemBase {
       case L3:
         setElevatorPosition(Constants.Elevator.ElevatorStatePositions.L3Position);
         break;
+      case L2Algae:
+        setElevatorPosition(Constants.Elevator.ElevatorStatePositions.L3AlgaePosition); //need to change
+        break;
       case L3Algae:
         setElevatorPosition(Constants.Elevator.ElevatorStatePositions.L3AlgaePosition);
+        break;
+      case TRACKING:
+        setElevatorPosition(Constants.Elevator.ElevatorStatePositions.trackingPosition);
         break;
       default:
         break;

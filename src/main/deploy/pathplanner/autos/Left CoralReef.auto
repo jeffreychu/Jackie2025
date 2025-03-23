@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left"
+            "pathName": "LCtoFLR"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left  Intake"
+            "pathName": "FLRtoLI"
           }
         },
         {
@@ -73,7 +73,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left Coral to Reef"
+            "pathName": "LItoFLR"
           }
         },
         {

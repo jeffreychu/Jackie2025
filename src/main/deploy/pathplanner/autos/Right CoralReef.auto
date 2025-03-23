@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right"
+            "pathName": "RCtoFRR"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "right Intake"
+            "pathName": "FRRtoRI"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "right Coral to Reef"
+            "pathName": "RItoFRR"
           }
         },
         {
