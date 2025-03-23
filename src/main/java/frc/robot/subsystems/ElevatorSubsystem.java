@@ -64,9 +64,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     configs.Slot0.kI = 0;
     configs.Slot0.kD = 0.0;//12.5;
     configs.Slot0.withGravityType(GravityTypeValue.Elevator_Static);
-    configs.MotionMagic.MotionMagicAcceleration = 275;//300
-    configs.MotionMagic.MotionMagicCruiseVelocity = 80;
-    configs.MotionMagic.MotionMagicJerk = 350;//600
+    configs.MotionMagic.MotionMagicAcceleration = 300;
+    configs.MotionMagic.MotionMagicCruiseVelocity = 60;
+    configs.MotionMagic.MotionMagicJerk = 725;
     configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     configs.Voltage.PeakForwardVoltage = 16;
     configs.Voltage.PeakReverseVoltage = -16;
@@ -113,6 +113,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     return elevatorRight.getClosedLoopError().getValueAsDouble() <= Constants.Elevator.positionThreshold;
   }
 
+  public ElevatorStates getCurrentState(){
+    return this.currentState;
+  }
+
   @Override
   public void periodic() {
     zeroSensors();
@@ -123,9 +127,12 @@ public class ElevatorSubsystem extends SubsystemBase {
   
     switch (currentState) {
       case HOME:
-        if(!getElevatorSensor()){
-          elevatorLeft.set(-0.20); 
-        }else{
+        if(!getElevatorSensor() && elevatorRight.getPosition().getValue().magnitude() > 2.0) {
+          elevatorRight.set(-0.20); 
+        } else if (!getElevatorSensor() && elevatorRight.getPosition().getValue().magnitude() <= 7.0) {
+          elevatorRight.set(-0.05);
+        } else{
+          elevatorRight.set(0);
           setElevatorState(ElevatorStates.TRACKING);
         }
         break;
