@@ -4,21 +4,41 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagDetection;
+import edu.wpi.first.apriltag.AprilTagDetector;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.apriltag.AprilTagPoseEstimate;
+import edu.wpi.first.apriltag.AprilTagPoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
+import frc.robot.RobotContainer;
 
 public class LimelightSubsystem extends SubsystemBase {
   /** Creates a new Limelight. */
+  private int lastSeenTagID = -1;
   
   private final String LLname;
+  private AprilTagFieldLayout field;
 
 
   public LimelightSubsystem() {
+    field = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
     LLname = Constants.Limelight.kLimelightName;
   }
 
@@ -38,11 +58,32 @@ public class LimelightSubsystem extends SubsystemBase {
     return LimelightHelpers.getLatestResults(LLname).getBotPose3d().getRotation();
   }
 
+  public double getTX() {
+    return LimelightHelpers.getTX(LLname);
+  }
+  public double getTY() {
+    return LimelightHelpers.getTY(LLname);
+  }
 
+  public Rotation2d getLatestTagRotation() {
+    if (lastSeenTagID == -1) {
+      return new Rotation2d();
+    }
+
+    System.out.print(lastSeenTagID + ": ");
+    System.out.println(field.getTagPose(lastSeenTagID).get().getRotation().toRotation2d().getDegrees());
+    return field.getTagPose(lastSeenTagID).get().getRotation().toRotation2d();
+    
+  }
+  //TODO implement logic for aligning to score and movement there
+
+
+  
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    LimelightHelpers.Flush();
+    if (lastSeenTagID != LimelightHelpers.getFiducialID(LLname) && LimelightHelpers.getFiducialID(LLname) != -1 && RobotContainer.driverJoystick.getRightTriggerAxis() < 0.1) {
+      lastSeenTagID = (int) LimelightHelpers.getFiducialID(LLname);
+    }  
   }
-  
 }
+ 

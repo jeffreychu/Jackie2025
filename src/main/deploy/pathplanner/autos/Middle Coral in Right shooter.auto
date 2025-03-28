@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of Middle"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Set Elevator L1"
@@ -26,6 +32,12 @@
           "type": "wait",
           "data": {
             "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "No Scoring"
           }
         }
       ]

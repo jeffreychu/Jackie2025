@@ -7,7 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MtoBM"
+            "pathName": "RCtoBRR"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Set Elevator L1"
           }
         },
         {
@@ -17,21 +29,21 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "BMtoRI"
+            "name": "Slow Outake"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "RItoFRR"
+            "name": "No Scoring"
           }
         }
       ]

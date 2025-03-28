@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5545,
-        "y": 1.6752499999999995
+        "x": 2.183778409090909,
+        "y": 1.3675710227272735
       },
       "isLocked": false,
       "linkedName": "reef FrontRight"
@@ -20,8 +20,8 @@
         "y": 0.7782499999999993
       },
       "prevControl": {
-        "x": 3.16875,
-        "y": 2.2114999999999996
+        "x": 3.3703977272727266,
+        "y": 2.494360795454545
       },
       "nextControl": null,
       "isLocked": false,

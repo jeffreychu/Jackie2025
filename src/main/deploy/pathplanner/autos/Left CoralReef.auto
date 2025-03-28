@@ -7,37 +7,97 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left"
+            "pathName": "LCtoFLR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Set Elevator L2"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Outake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Set Elevator HOME"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "left  Intake"
+            "pathName": "FLRtoLI"
           }
         },
         {
           "type": "wait",
           "data": {
             "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Set Elevator HOME"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "left Coral to Reef"
+            "pathName": "LItoFLR"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Set Elevator L1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Outake"
           }
         }
       ]

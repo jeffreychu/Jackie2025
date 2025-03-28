@@ -26,7 +26,8 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.ScoringSubsystem.ScoringStates;;
 
 public class LEDController extends SubsystemBase {
-    private final int numLEDs = 100;
+    private final int numLEDs = 61;
+    private final int numLEDsNonCandle = 53;
 
     private CANdle candle;
     private LEDStates ledState;
@@ -34,6 +35,7 @@ public class LEDController extends SubsystemBase {
     private boolean prevRumbleState;
     private boolean currentRumblestate;
     private double currentTime;
+    private LEDStates prevState;
 
     public enum LEDStates {
         DEFAULT,
@@ -117,6 +119,19 @@ public class LEDController extends SubsystemBase {
         candle.animate(null);
         candle.setLEDs(255, 255, 255, 0, 0, numLEDs);
     }
+
+    public void setColorWhiteRight() {
+        candle.animate(null);
+        candle.setLEDs(255, 255, 255, 0, 26, 18);
+        candle.setLEDs(0, 0, 0, 0, 0, 26);
+    }
+
+    public void setColorWhiteLeft() {
+
+        candle.animate(null);
+        candle.setLEDs(255, 255, 255, 0, 0, 26);
+        candle.setLEDs(0, 0, 0, 0, 26, 18);
+    }
     
     public void setColorGreenBlink() {
         candle.animate(new StrobeAnimation(0, 255, 0, 0, 0.3, numLEDs));
@@ -142,6 +157,11 @@ public class LEDController extends SubsystemBase {
         candle.animate(null);
         candle.setLEDs(0, 255, 255, 0, 0, numLEDs);
     }
+
+    // public void setColorCyan(){
+    //     candle.animate(null);
+    //     candle.setLEDs(0, 255, 255, 0, 0, numLEDs);
+    // }
     
     public void setColorCyanBlink() {
         candle.animate(new StrobeAnimation(0, 255, 255, 0, 0.3, numLEDs));
@@ -155,8 +175,8 @@ public class LEDController extends SubsystemBase {
         candle.animate(new StrobeAnimation(r, g, b, w, speed, numLEDs));
     }
 
-    public void setLarsonAnmation(int r, int g, int b, int w, double speed, BounceMode mode, int size) {
-        candle.animate(new LarsonAnimation(r, g, b, w, speed, numLEDs, mode, size));
+    public void setLarsonAnmation(int r, int g, int b, int w, double speed, BounceMode mode, int size, int offset) {
+        candle.animate(new LarsonAnimation(r, g, b, w, speed, numLEDsNonCandle, mode, size, offset));
     }
 
     public void setColorFlowAnimation(int r, int g, int b, int w, double speed, Direction direction) {
@@ -185,16 +205,20 @@ public class LEDController extends SubsystemBase {
             ledState = LEDStates.DISABLED;
         } else if (RobotContainer.operatorJoystick.rightBumper().getAsBoolean()){
             ledState = LEDStates.STORED_RIGHT;
+            prevState = LEDStates.STORED_RIGHT;
         } else if (RobotContainer.operatorJoystick.leftBumper().getAsBoolean()){
             ledState = LEDStates.STORED_LEFT;
-        } else if (!RobotContainer.coralShooter.isLoaded() && RobotContainer.coralShooter.getScoringState() == ScoringStates.INTAKE) {
-            ledState = LEDStates.INTAKING;
+            prevState = LEDStates.STORED_LEFT;
         } else if (RobotContainer.coralShooter.isLoaded()) {
             ledState = LEDStates.LOADED;
-        } else if (RobotContainer.coralShooter.getScoringState() == ScoringStates.OUTAKE || RobotContainer.coralShooter.getScoringState() == ScoringStates.OUTAKE2) {
-            ledState = LEDStates.OUTAKING;
+        } else if (RobotContainer.coralShooter.getScoringState() == ScoringStates.OUTAKE) {
+            if (prevState != null) {
+                ledState = prevState;
+            } else {
+                ledState = LEDStates.DEFAULT;
+            }
         } else {
-            ledState = LEDStates.DEFAULT;
+            // ledState = LEDStates.DEFAULT;
         }
     }
 
@@ -204,13 +228,14 @@ public class LEDController extends SubsystemBase {
         
         switch (ledState) {
             case DISABLED:
-                setColorWhiteBlink();
+                setLarsonAnmation(255, 255 , 255, 0, 0.5, LarsonAnimation.BounceMode.Center, numLEDsNonCandle, 8);
                 break;
             case STORED_RIGHT:
-                setColorGreen();
+                
+                setColorWhiteRight();
                 break;
             case STORED_LEFT:
-                setColorOrange();
+                setColorWhiteLeft();
                 break;        
             case INTAKING:
                 setColorBlueBlink();
@@ -223,7 +248,7 @@ public class LEDController extends SubsystemBase {
                 break;
             case DEFAULT: 
             default:
-                setColorCyan();
+                setColorBlue();
                 break;
         }
     }
