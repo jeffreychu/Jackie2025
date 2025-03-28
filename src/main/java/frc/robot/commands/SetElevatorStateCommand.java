@@ -29,7 +29,6 @@ public class SetElevatorStateCommand extends Command {
   @Override
   public void initialize() {
     elevatorSubsystem.setElevatorState(state);
-    System.out.println(state);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

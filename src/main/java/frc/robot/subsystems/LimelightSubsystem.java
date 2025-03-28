@@ -38,13 +38,11 @@ public class LimelightSubsystem extends SubsystemBase {
     return LimelightHelpers.getLatestResults(LLname).getBotPose3d().getRotation();
   }
 
-  //TODO implement logic for aligning to score and movement there
-
-
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    LimelightHelpers.Flush();
   }
   
 }

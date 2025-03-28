@@ -357,12 +357,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
 
-    public Command getDriveCommand(CommandXboxController joystick , CommandSwerveDrivetrain driveTrain, SwerveRequest.FieldCentric drive ,SwerveRequest.FieldCentricFacingAngle driveAngle,  ScoringSubsystem scoring , double MaxSpeed , double MaxAngularRate){
+    public Command getDriveCommand(CommandXboxController joystick , CommandSwerveDrivetrain driveTrain, SwerveRequest.FieldCentric drive ,
+    SwerveRequest.FieldCentricFacingAngle driveAngle,  ScoringSubsystem scoring , double MaxSpeed , double MaxAngularRate){
         return new InstantCommand(()->{
-           if(joystick.rightTrigger(0.1).getAsBoolean() && scoring.isLoaded()){ // It might not have to be loaded
+           if(joystick.rightTrigger(0.1).getAsBoolean() && scoring.isLoaded()){ //TODO ask driver for preferance
                 driveTrain.applyRequest(() -> driveAngle.withVelocityX(-joystick.getLeftY() * MaxSpeed)
                             .withVelocityY(-joystick.getLeftX() * MaxAngularRate)
-                            .withTargetDirection(limelight.getRecentTagRotation2d())); //Check
+                            .withTargetDirection(limelight.getRecentTagRotation2d())); //Check igf needed to adjust // Tune LL
             }else {
                 driveTrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) 
                         .withVelocityY(-joystick.getLeftX() * MaxSpeed) 
