@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LCtoBLR"
+            "pathName": "MtoBM"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -31,7 +31,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Outake"
+            "name": "Slow Outake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "No Scoring"
           }
         }
       ]

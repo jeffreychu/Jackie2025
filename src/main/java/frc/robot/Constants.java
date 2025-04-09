@@ -9,7 +9,7 @@ public final class Constants {
     public static final int kDriverController = 0;
     public static final int kOperatorController = 1; // TODO change
     
-    public static final double driverRumbleValue = 0.60;
+    public static final double driverRumbleValue = 0.80;
 
     /******* SWERVE DRIVE MOTORS ******/
     public static class DriveMotors {
@@ -51,6 +51,7 @@ public final class Constants {
     /******* ELEVATOR SUBSYSTEM ********/
     public static class Elevator {
         public static final double positionThreshold = 0.01;
+        public static final double debouncertemp = 0.1;
         public static class Motors {
             // ELEVATOR MOTOR ID'S
             public static final int elevatorLeftID = 13;
@@ -68,12 +69,14 @@ public final class Constants {
             public static final double rightHomePostion = 0.0;
 
             public static final double trackingPosition = 2.5; //1.50;
-            public static final double coralIntakePostion = 7.8;
-            public static final double L1Position = 9.0;
-            public static final double L2Position = 11.76;
-            public static final double L3Position = 18.3;
+            public static final double coralIntakePostion = 6.5;//6.75;//7.0; //7.25;//7.50;//7.55;//7.50;
+            public static final double L1Position = 6.8; //7.0;//9.0;
+            public static final double L2Position = 10.5; //10.76;//11.76;
+            public static final double L3Position = 17.70; //17.90;//18.3;
 
+            public static final double L2AlgaePosition = 15.0;
             public static final double L3AlgaePosition = 15.0;
+            
 
         }
     }
@@ -88,8 +91,8 @@ public final class Constants {
 
         public class ScoringSpeeds {
             public static double coralIntake = -0.4;//-0.5
-            public static double coralOutake = -0.2418;
-            public static double coralOutake2 = -0.2018;
+            public static double coralOutake = -0.2018;//-0.2418;
+            public static double coralOutake2 = -0.2318;//-0.2018;
 
             
             public static double coralOutake2Auto = -.2018;//- .2418; //-0.418;
@@ -120,11 +123,11 @@ public final class Constants {
         /********* ALGAE SUBSYSTEM ***********/
         public static class Algae {
             
-            public static final int algaeMotorID = 20;
+            public static final int algaeMotorID = 18;
            //t public static final String AlgaeSpeeds = null;
 
             public class AlgaeSpeeds {
-                public static double algaeIntake1 = -0.2018;
+                public static double algaeIntake1 = -0.27;
                 public static double algaeOutake = 0.2018;
     
                 
@@ -144,7 +147,7 @@ public final class Constants {
             public static final double positionThreshold = 0.01;
             public static class Motors {
                 // CLIMBER MOTOR ID'S
-                public static final int climberMotorID = 20; //set value
+                public static final int climberMotorID = 19; //set value
     
             }
     

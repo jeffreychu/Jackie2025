@@ -146,13 +146,13 @@ public class RobotContainer {
         // ));
 
                 driverJoystick.leftBumper().whileTrue(
-                                new RunCommand(() -> coralShooter.setScoringState(ScoringStates.OUTAKE), coralShooter))
+                                new RunCommand(() -> coralShooter.setScoringState(ScoringStates.OUTAKE2), coralShooter))
                                 .onFalse(
                                                 new RunCommand(() -> coralShooter.setScoringState(ScoringStates.NONE),
                                                                 coralShooter));
 
                 driverJoystick.leftTrigger().whileTrue(
-                                new RunCommand(() -> coralShooter.setScoringState(ScoringStates.OUTAKE2), coralShooter))
+                                new RunCommand(() -> coralShooter.setScoringState(ScoringStates.OUTAKE), coralShooter))
                                 .onFalse(
                                                 new RunCommand(() -> coralShooter.setScoringState(ScoringStates.NONE),
                                                                 coralShooter));

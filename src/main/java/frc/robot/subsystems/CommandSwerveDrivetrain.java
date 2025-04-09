@@ -36,10 +36,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.RobotContainer;
 import frc.robot.Constants;
+import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.IntakingCommand;
 import frc.robot.commands.SetElevatorStateCommand;
 import frc.robot.commands.SetScoringStateCommand;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.subsystems.AlgaeSubsystem.AlgaeStates;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorStates;
 import frc.robot.subsystems.ScoringSubsystem.ScoringStates;
 
@@ -227,6 +229,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         NamedCommands.registerCommand("Outake", new SetScoringStateCommand(ScoringStates.OUTAKE));
         NamedCommands.registerCommand("Slow Outake", new SetScoringStateCommand(ScoringStates.OUTAKE2AUTO));
         NamedCommands.registerCommand("No Scoring", new SetScoringStateCommand(ScoringStates.NONE));
+
+        NamedCommands.registerCommand("Algae Intake", new AlgaeIntakeCommand(AlgaeStates.INTAKE));
+        NamedCommands.registerCommand("Algae Outake", new AlgaeIntakeCommand(AlgaeStates.OUTAKE));
 
         try {
             var config = RobotConfig.fromGUISettings();

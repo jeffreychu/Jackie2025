@@ -71,15 +71,18 @@ public class ScoringSubsystem extends SubsystemBase {
   public void periodic() {
     if (isLoaded()) {
       if (Timer.getFPGATimestamp() - prevTime < 1.0) {
-        RobotContainer.driverJoystick.setRumble(RumbleType.kBothRumble, Constants.driverRumbleValue);
+        System.out.println("If executed");
+        RobotContainer.driverJoystick.setRumble(RumbleType.kBothRumble, 0);
         RobotContainer.operatorJoystick.setRumble(RumbleType.kBothRumble, Constants.driverRumbleValue);
       } else {
+        System.out.println("Else executed");
         RobotContainer.driverJoystick.setRumble(RumbleType.kBothRumble, 0);
         RobotContainer.operatorJoystick.setRumble(RumbleType.kBothRumble, 0);
       }
     } else {
       prevTime = Timer.getFPGATimestamp();
     }
+     
 
     // This method will be called once per scheduler run
 

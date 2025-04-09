@@ -15,6 +15,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -45,6 +46,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double currentLeftPosition;
   private double currentRightPosition;
   private boolean hasZeroed;
+  private Debouncer debouncer;
+
 
   /** Creates a new Elevator. */
   public ElevatorSubsystem() {
@@ -80,6 +83,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorLeft.setPosition(0);
     elevatorRight.setPosition(0);
 
+    debouncer = new Debouncer(Constants.Elevator.debouncertemp);
+
+
     elevatorLeft.setControl(new Follower(elevatorRight.getDeviceID(), false));
   }
 
@@ -98,12 +104,14 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public boolean getElevatorSensor() {
     return !elevatorSensor.get();
+    
   }
 
   public void zeroSensors() {
-    if (getElevatorSensor()) {
+    if (debouncer.calculate(getElevatorSensor())) {
       elevatorLeft.setPosition(0);
       elevatorRight.setPosition(0);
+      
     }
 
     SmartDashboard.putBoolean("Elevator Sensor", getElevatorSensor());
@@ -127,11 +135,16 @@ public class ElevatorSubsystem extends SubsystemBase {
   
     switch (currentState) {
       case HOME:
-        if(!getElevatorSensor() && elevatorRight.getPosition().getValue().magnitude() > 2.0) {
+        if(!getElevatorSensor() && elevatorRight.getPosition().getValue().magnitude() > 7.0) {
           elevatorRight.set(-0.20); 
-        } else if (!getElevatorSensor() && elevatorRight.getPosition().getValue().magnitude() <= 7.0) {
+        } else if (!getElevatorSensor() && elevatorRight.getPosition().getValue().magnitude() <= 7.0 && elevatorRight.getPosition().getValue().magnitude() > 2.0) {
           elevatorRight.set(-0.05);
-        } else{
+        }
+        else if (!getElevatorSensor() && elevatorRight.getPosition().getValue().magnitude() <= 2.0) {
+          elevatorRight.set(0.0);
+        }
+        
+        else{
           elevatorRight.set(0);
           setElevatorState(ElevatorStates.TRACKING);
         }
@@ -149,7 +162,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         setElevatorPosition(Constants.Elevator.ElevatorStatePositions.L3Position);
         break;
       case L2Algae:
-        setElevatorPosition(Constants.Elevator.ElevatorStatePositions.L3AlgaePosition); //need to change
+        setElevatorPosition(Constants.Elevator.ElevatorStatePositions.L2AlgaePosition); //need to change
         break;
       case L3Algae:
         setElevatorPosition(Constants.Elevator.ElevatorStatePositions.L3AlgaePosition);
