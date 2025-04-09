@@ -371,7 +371,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
            if(joystick.rightTrigger(0.1).getAsBoolean()){ // It might not have to be loaded
                 return driveTrain.applyRequest(() -> driveAngle.withVelocityX(-joystick.getLeftY() * MaxSpeed)
                             .withVelocityY(-joystick.getLeftX() * MaxAngularRate)
-                            .withTargetDirection(limelight.getRecentTagRotation2d())); //Check
+                            .withTargetDirection(limelight.getRecentTagRotation2d())); //Check igf needed to adjust // Tune LL
             }else {
                 return driveTrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) 
                         .withVelocityY(-joystick.getLeftX() * MaxSpeed) 
